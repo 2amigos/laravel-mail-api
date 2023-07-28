@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "eaffb50f-deae-4306-a8af-85b77c3d5102",
+		"name": "Mail API Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1948434"
+	},
+	"item": [
+		{
+			"name": "Token",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Message",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "from",
+							"value": "user@email.com",
+							"type": "text"
+						},
+						{
+							"key": "sender",
+							"value": "Test user",
+							"type": "text"
+						},
+						{
+							"key": "to",
+							"value": "user@email.com",
+							"type": "text"
+						},
+						{
+							"key": "receiver",
+							"value": "Test user",
+							"type": "text"
+						},
+						{
+							"key": "subect",
+							"value": "testing api",
+							"type": "text"
+						},
+						{
+							"key": "attachments[]",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "language",
+							"value": "en",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "template",
+							"value": "hello-world",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/send-message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"send-message"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
