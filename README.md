@@ -1,4 +1,4 @@
-#Mail API Service
+# Mail API Service
 
 <p align="center">
     <a href="https://2am.tech/our-work/open-source" target="_blank">
