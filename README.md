@@ -1,8 +1,14 @@
-# Mail API Service
+# Laravel Mail API
 
 <p align="center">
     <a href="https://2am.tech/our-work/open-source" target="_blank">
         <img src="./assets/img/mail-api-service.png" width="800" target="_blank" alt="Mail API Logo">
+    </a>
+</p>
+
+<p align="center">
+    <a href="https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml">
+        <img src="https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml/badge.svg">
     </a>
 </p>
 
