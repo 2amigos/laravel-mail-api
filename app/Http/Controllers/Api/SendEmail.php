@@ -7,9 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\EmailDispatcher;
 use App\Jobs\FilesCleanup;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Log;
 
 class SendEmail extends Controller
 {

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use function app;
+
 use function collect;
 use function config;
 
@@ -55,8 +55,7 @@ class ApiAuthProvider
     {
         if ($request->path() === 'api/token') {
             return self::basicAuth($request);
-        }
-        else {
+        } else {
             return self::tokenAuth($request);
         }
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\ApiAuthProvider;
 use Exception;
 use Illuminate\Http\Request;
+
 use function response;
 
 class CreateToken extends Controller

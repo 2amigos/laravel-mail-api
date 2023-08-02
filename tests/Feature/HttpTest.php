@@ -27,7 +27,8 @@ class HttpTest extends TestCase
         $this->withBasicAuth($user->email, $pwd)
             ->postJson('/api/token')
             ->assertStatus(201)
-            ->assertJson(fn (AssertableJson $json) =>
+            ->assertJson(
+                fn (AssertableJson $json) =>
                 $json->has('token')
                     ->whereType('token', 'string')
                     ->etc()
@@ -43,7 +44,9 @@ class HttpTest extends TestCase
             ->postJson('/api/token')
             ->assertStatus(500)
             ->assertJson(fn (AssertableJson $json) =>
-            $json->has('error', fn (AssertableJson $json) =>
+            $json->has(
+                'error',
+                fn (AssertableJson $json) =>
                 $json->where('message', 'Invalid credentials.')
                 ->etc()
             )->etc());
@@ -77,12 +80,15 @@ class HttpTest extends TestCase
                     'attachments[]' => UploadedFile::fake()->image('photo1.jpg'),
                 ])
                 ->assertStatus(200)
-                ->assertJson(fn (AssertableJson $json) =>
-                    $json->has('data', fn (AssertableJson $data) =>
+                ->assertJson(
+                    fn (AssertableJson $json) =>
+                    $json->has(
+                        'data',
+                        fn (AssertableJson $data) =>
                             $data->whereType('message', 'string')
                             ->where('message', 'the message will be sent!')
                             ->etc()
-                        )
+                    )
                         ->etc()
                 );
 
@@ -110,8 +116,11 @@ class HttpTest extends TestCase
 
             $this->makeRequest(endpoint: '/api/send-message', token: $token['token'])
                 ->assertStatus(500)
-                ->assertJson(fn (AssertableJson $json) =>
-                    $json->has('error', fn (AssertableJson $json) =>
+                ->assertJson(
+                    fn (AssertableJson $json) =>
+                    $json->has(
+                        'error',
+                        fn (AssertableJson $json) =>
                         $json->where('message', 'Token expired.')
                         ->etc()
                     )->etc()
@@ -141,8 +150,11 @@ class HttpTest extends TestCase
 
             $this->makeRequest('/api/send-message', $token['token'])
                 ->assertStatus(500)
-                ->assertJson(fn (AssertableJson $json) =>
-                    $json->has('error', fn (AssertableJson $json) =>
+                ->assertJson(
+                    fn (AssertableJson $json) =>
+                    $json->has(
+                        'error',
+                        fn (AssertableJson $json) =>
                         $json->where('message', 'Invalid token.')
                         ->etc()
                     )->etc()

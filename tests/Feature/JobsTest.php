@@ -39,13 +39,15 @@ class JobsTest extends TestCase
                 template: 'hello-world',
                 language: 'en',
                 attachments: $this->files
-            ));
+            )
+        );
 
         dispatch_sync(
             new EmailDispatcher(
                 from: fake()->email,
                 to: fake()->email,
-            ));
+            )
+        );
 
         dispatch_sync(
             new EmailDispatcher(
@@ -56,7 +58,8 @@ class JobsTest extends TestCase
                 subject: 'testing jobs',
                 template: 'password',
                 language: 'es',
-            ));
+            )
+        );
 
         Queue::assertPushed(EmailDispatcher::class, 3);
     }
