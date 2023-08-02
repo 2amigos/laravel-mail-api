@@ -61,6 +61,9 @@ class Handler extends ExceptionHandler
             $response['trace'] = $e->getTrace();
         }
 
-        return response()->json($response);
+        return response() ->json(
+            $response,
+            500
+        );
     }
 }

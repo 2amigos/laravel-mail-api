@@ -50,7 +50,6 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        //$this->message->attachments
         Mail::to($this->to, $this->receiver)
             ->locale($this->getLanguage($this->language))
             ->send($this->message);
@@ -67,7 +66,7 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
 
             return 'templates.'.$template;
         } catch (Exception $e) {
-            return 'templates.'.config('mail-api-service.template');
+            return 'templates.'.config('laravel-mail-api.template');
         }
     }
 
@@ -79,6 +78,6 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
     {
         return file_exists(lang_path($language))
             ? $language
-            : config('mail-api-service.language');
+            : config('laravel-mail-api.language');
     }
 }

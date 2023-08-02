@@ -12,7 +12,6 @@ use Illuminate\Queue\SerializesModels;
 
 class Message extends Mailable
 {
-    use Queueable;
     use SerializesModels;
 
     protected Address $sender;

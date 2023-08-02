@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Service\TokenService;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Auth::viaRequest('mail-api', function (Request $request) {
-            return TokenService::tokenAuth($request);
+            return ApiAuthProvider::auth($request);
         });
     }
 }

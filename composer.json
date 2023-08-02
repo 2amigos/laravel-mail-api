@@ -1,8 +1,24 @@
 {
-    "name": "laravel/laravel",
+    "name": "2amigos/laravel-mail-api",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "Laravel mail API microservice",
+    "keywords": [
+        "framework",
+        "laravel",
+        "mail",
+        "api",
+        "rest",
+        "microservice"
+    ],
+    "homepage": "https://github.com/2amigos/laravel-mail-api",
+    "authors": [
+        {
+            "name": "2amigos",
+            "email": "hola@2amigos.us",
+            "homepage": "https://2am.tech/",
+            "role": "Developer"
+        }
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",

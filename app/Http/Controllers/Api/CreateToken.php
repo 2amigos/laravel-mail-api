@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Service\TokenService;
+use App\Providers\ApiAuthProvider;
 use Exception;
 use Illuminate\Http\Request;
-
 use function response;
 
 class CreateToken extends Controller
@@ -18,7 +17,7 @@ class CreateToken extends Controller
     {
         $user = $request->user('user');
 
-        $token = TokenService::create($user);
+        $token = ApiAuthProvider::createToken($user);
 
         return response()
             ->json($token)

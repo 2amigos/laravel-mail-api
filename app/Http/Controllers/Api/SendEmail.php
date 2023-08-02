@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Classes\FilesHandler;
 use App\Http\Controllers\Controller;
 use App\Jobs\EmailDispatcher;
 use App\Jobs\FilesCleanup;
@@ -21,9 +22,9 @@ class SendEmail extends Controller
         $to = $request->input('to');
         $receiver = $request->input('receiver', '');
         $subject = $request->input('subject', '');
-        $template = $request->input('template', config('mail-api-service.template'));
-        $language = $request->input('language', config('mail-api-service.language'));
-        $attachments = $this->handleAttachments($request->file()['attachments'] ?? []);
+        $template = $request->input('template', config('laravel-mail-api.template'));
+        $language = $request->input('language', config('laravel-mail-api.language'));
+        $attachments = FilesHandler::handleAttachments($request->file()['attachments'] ?? []);
 
         Bus::chain([
             new EmailDispatcher(
@@ -53,7 +54,7 @@ class SendEmail extends Controller
      */
     private function validateRequest(Request $request): void
     {
-        $allowedMimeTypes = config('mail-api-service.attachments-allowed-mimetypes');
+        $allowedMimeTypes = config('laravel-mail-api.attachments-allowed-mimetypes');
 
         $rules = [
             'from' => 'required|email',
@@ -71,32 +72,5 @@ class SendEmail extends Controller
         }
 
         $request->validate($rules);
-    }
-
-    private function handleAttachments(array $attachments): array
-    {
-        if (empty($attachments)) {
-            return $attachments;
-        }
-
-        Log::info('Handling attachments');
-
-        $files = [];
-
-        /** @var UploadedFile $attachment */
-        foreach ($attachments as $attachment) {
-            $name = $attachment->getClientOriginalName();
-            $path = $attachment->store('/api/files');
-
-            $files[] = [
-                'name' => $name,
-                'path' => $path,
-                'mime' => $attachment->getMimeType(),
-            ];
-        }
-
-        Log::info('attachments stored', $files);
-
-        return $files;
     }
 }

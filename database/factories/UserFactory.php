@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -37,5 +38,20 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => Carbon::now(),
         ]);
+    }
+
+    /**
+     * Set user password
+     *
+     * @param string $password
+     * @return UserFactory
+     */
+    public function withPassword(string $password)
+    {
+        return $this->state(function (array $attributes) use ($password){
+            $attributes['password'] = Hash::make($password);
+
+            return $attributes;
+        });
     }
 }

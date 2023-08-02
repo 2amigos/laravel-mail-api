@@ -3,18 +3,21 @@
 namespace Tests\Feature;
 
 use App\Models\User;
-use App\Service\TokenService;
+use App\Providers\ApiAuthProvider;
 use Exception;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class TokenTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_should_issue_token()
     {
         $user = User::factory()->create();
 
         try {
-            $token = TokenService::create($user);
+            $token = ApiAuthProvider::createToken($user);
 
             $this->assertIsArray($token);
             $this->assertArrayHasKey('token', $token);
@@ -29,9 +32,9 @@ class TokenTest extends TestCase
         $user = User::factory()->create();
 
         try {
-            $token = TokenService::create($user);
+            $token = ApiAuthProvider::createToken($user);
 
-            $storedToken = TokenService::findToken($token['token']);
+            $storedToken = ApiAuthProvider::findToken($token['token']);
 
             $this->assertNotNull($storedToken);
 
