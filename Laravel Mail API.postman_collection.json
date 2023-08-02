@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "eaffb50f-deae-4306-a8af-85b77c3d5102",
-		"name": "Mail API Service",
+		"_postman_id": "8d2587b3-f023-4ff7-b784-0b6711606aa7",
+		"name": "Laravel Mail API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "1948434"
 	},
@@ -89,7 +89,7 @@
 							"type": "text"
 						},
 						{
-							"key": "subect",
+							"key": "subject",
 							"value": "testing api",
 							"type": "text"
 						},
