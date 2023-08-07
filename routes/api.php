@@ -13,5 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/token', \App\Http\Controllers\Api\CreateToken::class);
-Route::post('/send-message', \App\Http\Controllers\Api\SendEmail::class);
+#Route::post('/token', \App\Http\Controllers\Api\CreateToken::class);
+Route::post('/send-message', [\App\Http\Controllers\Api\SendEmail::class, 'send']);
+
+Route::prefix('/token')->group(function () {
+    Route::post('/login', [\App\Http\Controllers\Api\AuthController::class, 'login']);
+});
+
+#Route::post('/logout', 'AuthController@logout');
+#Route::post('/refresh', 'AuthController@refresh');

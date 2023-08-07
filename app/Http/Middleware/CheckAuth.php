@@ -19,15 +19,16 @@ class CheckAuth
     {
         Log::info('Check user authentication');
 
-        if (! (Auth::guard('user')->check() || Auth::check())) {
-            $exception = new UnauthorizedException('Unauthorized.');
+        if ($request->path() !== 'api/token/login') {
+            if (! Auth::check()) {
+                $exception = new UnauthorizedException('Unauthorized.');
 
-            Log::error($exception->getMessage());
-            throw $exception;
+                Log::error($exception->getMessage());
+                throw $exception;
+            }
+
+            Log::info('Authenticated');
         }
-
-        Log::info('Authenticated');
-
         return $next($request);
     }
 }

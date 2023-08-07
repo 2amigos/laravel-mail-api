@@ -6,11 +6,11 @@
     </a>
 </p>
 
-<p align="center">
-    <a href="https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml">
-        <img src="https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml/badge.svg">
-    </a>
-</p>
+
+[![Build](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml/badge.svg)](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml)
+[![Software License](https://img.shields.io/badge/license-BSD-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![code coverage - change](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml/badge.svg)](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml)
+[![code qualit - change](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml/badge.svg)](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml)
 
 ## About Mail API Service
 
@@ -42,10 +42,10 @@ To start up/stop the docker container, use the following commands:
 
 ```SH
 // to start up the container
-./vendor/bin/sail up -d
+$ ./vendor/bin/sail up -d
 
 # to stop the container
-./vendor/bin/sail stop 
+$ ./vendor/bin/sail stop 
 ```
 
 If you're using Laravel Sail, refer to **.env.sail** for mysql and redis connection setup.   
@@ -57,22 +57,22 @@ The **.env.example** file gives the basic structure your project must have in or
 After configuring your database connection on your **.env** file, you're ready to migrate the necessary tables through the command bellow:
 
 ```SH
-php artisan migrate
+$ php artisan migrate
 ```
 
 or, if you are using Sail
 
 ```SH
-./vendor/bin/sail php artisan migrate
+$ ./vendor/bin/sail php artisan migrate
 ```
 
 Now, with the database set, the user can be created by running the next command, and following a couple of simple steps.
 
 ```SH
-php artisan app:create-user
+$ php artisan app:create-user
 
 # or on sail
-./vendor/bin/sail php artisan app:create-user
+$ ./vendor/bin/sail php artisan app:create-user
 ```
 
 ### Email Transport Configuration
@@ -91,18 +91,18 @@ MAIL_ENCRYPTION=tls
 ```
 
 The project has [Laravel Pint](https://laravel.com/docs/10.x/pint) configured, you can run the command bellow to assure the code style is being followed:
-```
-./vendor/bin/pint --config pint.json
+```SH
+$ ./vendor/bin/pint
 ```
 
 ## Usage
 
 To serve the application, Laravel provides the handy built in command **serve**
 ```SH
-php artisan serve
+$ php artisan serve
 
 # or on Sail
-./vendor/bin/sail php artisan serve
+$ ./vendor/bin/sail php artisan serve
 ```
 
 This command serve your application at [http://127.0.0.1:8000](http://127.0.0.1:8000).
@@ -123,7 +123,7 @@ The `basic-token` can be obtained by `echo -n email:password | base64`
 Here is a `/token` request example:
 
 ```SH
-curl --location --request POST 'http://localhost/api/token' 
+$ curl --location --request POST 'http://localhost/api/token' 
 \ --header 'Authorization: Basic {basic_token}'
 ```
 
@@ -147,7 +147,7 @@ Then you can send `multipart/form-data` request with the following parameters:
 Here is a sample request:
 
 ```SH
-curl --location 'http://localhost/api/send-message' \
+$ curl --location 'http://localhost/api/send-message' \
 --header 'Authorization: Bearer {token}' \
 --form 'from="{email-sender@domain}"' \
 --form 'sender="Mark"' \
@@ -164,9 +164,10 @@ Done. Now your new message is on the queue, ready to be dispatched. To achieve t
 you just need to run this command:
 
 ```SH
-php artisan queue:work
-// or on sail
-./vendor/bin/sail php artisan queue:work
+$ php artisan queue:work
+
+# or on sail
+$ ./vendor/bin/sail php artisan queue:work
 ```
 
 #### Email Attachments
@@ -217,3 +218,17 @@ Although the queue work command is handy and makes it really easy to consume the
 but it's extremely recommended to use [Supervisor](http://supervisord.org/) when deploying to production.
 
 Laravel has a nice guide to properly [configure](https://laravel.com/docs/10.x/queues#supervisor-configuration) the Supervisor.
+
+## Contributing
+
+Please, see [CONTRIBUTING](./contributing.md) for details.
+
+## License
+The BSD License (BSD). Please see [License File](./license.md) for more information/
+
+> <img src="">
+
+Web development has never been so fun!
+
+[https://2am.tech/](https://2am.tech/)
+

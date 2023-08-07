@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Bus;
 
 class SendEmail extends Controller
 {
-    public function __invoke(Request $request)
+    public function send(Request $request)
     {
         $this->validateRequest($request);
 
