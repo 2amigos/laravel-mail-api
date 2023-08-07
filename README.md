@@ -226,7 +226,7 @@ Please, see [CONTRIBUTING](./contributing.md) for details.
 ## License
 The BSD License (BSD). Please see [License File](./license.md) for more information/
 
-> <img src="">
+> [![2am.tech](https://avatars.githubusercontent.com/u/3440791?s=200&v=4)](https://2am.tech/)
 
 Web development has never been so fun!
 
