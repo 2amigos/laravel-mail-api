@@ -185,13 +185,13 @@ use Laravel\Sanctum\PersonalAccessToken;
 // from this 
 return [
     ...
-    'attachments-allowed-mimetypes' => env('ATTACHMENT_MIMETYPES', ['application/pdf', 'image/*']),
+    'attachmentsAllowedMimetypes' => env('ATTACHMENT_MIMETYPES', ['application/pdf', 'image/*']),
 ];
 
 // to this
 return [
     ...
-    'attachments-allowed-mimetypes' => env('ATTACHMENT_MIMETYPES', '*'),
+    'attachmentsAllowedMimetypes' => env('ATTACHMENT_MIMETYPES', '*'),
 ]; 
 ```
 

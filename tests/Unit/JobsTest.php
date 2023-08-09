@@ -1,6 +1,5 @@
 <?php
 
-namespace Tests\Feature;
 
 use App\Classes\FilesHandler;
 use App\Jobs\EmailDispatcher;

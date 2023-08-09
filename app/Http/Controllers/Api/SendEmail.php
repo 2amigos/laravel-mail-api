@@ -6,12 +6,17 @@ use App\Classes\FilesHandler;
 use App\Http\Controllers\Controller;
 use App\Jobs\EmailDispatcher;
 use App\Jobs\FilesCleanup;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
 
 class SendEmail extends Controller
 {
-    public function send(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function __invoke(Request $request): JsonResponse
     {
         $this->validateRequest($request);
 
@@ -52,7 +57,7 @@ class SendEmail extends Controller
      */
     private function validateRequest(Request $request): void
     {
-        $allowedMimeTypes = config('laravel-mail-api.attachments-allowed-mimetypes');
+        $allowedMimeTypes = config('laravel-mail-api.attachmentsAllowedMimetypes');
 
         $rules = [
             'from' => 'required|email',

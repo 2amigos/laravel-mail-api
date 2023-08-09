@@ -1,6 +1,5 @@
 <?php
 
-namespace Tests\Feature;
 
 use App\Mail\Message;
 use Illuminate\Foundation\Testing\RefreshDatabase;

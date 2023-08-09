@@ -1,20 +1,16 @@
 <?php
 
-namespace Tests\Feature;
 
 use App\Jobs\EmailDispatcher;
 use App\Jobs\FilesCleanup;
 use App\Models\User;
-use App\Providers\ApiAuthProvider;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
-use Illuminate\Support\Facades\Storage;
-use Exception;
 
 class HttpTest extends TestCase
 {
