@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
 use App\Providers\AuthorizationProvider;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
+use Exception;
 
 class CreateSignature extends Command
 {
@@ -36,13 +35,21 @@ class CreateSignature extends Command
 
         $accessKey = $this->ask('Inform the Token Access Key');
 
-        $tokenAttributes = AuthorizationProvider::getTokenProperties($accessKey);
-        $timezone = Carbon::now()->toIso8601String();
+        try {
+            $tokenAttributes = AuthorizationProvider::getTokenProperties($accessKey);
+        } catch (Exception $exception) {
+            $this->error($exception->getMessage());
+
+            return 0;
+        }
+
+        $timezone = Carbon::now()->utc()->toIso8601String();
+
         $this->info('tz: ' . $timezone);
         $signature = AuthorizationProvider::signToken(
-            token: $tokenAttributes['appKey'],
+            appKey: $tokenAttributes['appKey'],
+            appSecret: $tokenAttributes['appSecret'],
             timeStamp: $timezone,
-            secret: $tokenAttributes['appSecret'],
         );
 
         $this->info($signature);
