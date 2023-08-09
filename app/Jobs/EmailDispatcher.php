@@ -17,7 +17,7 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
 
     private Mailable $message;
 
-    private string $to;
+    private string $toEmail;
 
     private ?string $receiver;
 
@@ -25,20 +25,20 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
 
     public $backoff = 3;
 
-    public function __construct(string $from, string $to, ?string $sender = '', ?string $receiver = '', ?string $subject = '', ?string $template = '', ?string $language = '', ?array $attachments = [])
+    public function __construct(string $fromEmail, string $toEmail, ?string $sender = '', ?string $receiver = '', ?string $subject = '', ?string $template = '', ?string $language = '', ?array $attachments = [])
     {
         Log::info('Queueing new massage', [
-            'to' => $to,
-            'from' => $from,
+            'to' => $toEmail,
+            'from' => $fromEmail,
             'template' => $template,
         ]);
 
-        $this->to = $to;
+        $this->toEmail = $toEmail;
         $this->receiver = $receiver;
         $this->language = $language;
 
         $this->message = new Message(
-            sender: ['address' => $from, 'name' => $sender],
+            sender: ['address' => $fromEmail, 'name' => $sender],
             subject: $subject,
             template: $this->getTemplate($template),
             attachments: $attachments,
@@ -50,7 +50,7 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        Mail::to($this->to, $this->receiver)
+        Mail::to($this->toEmail, $this->receiver)
             ->locale($this->getLanguage($this->language))
             ->send($this->message);
     }

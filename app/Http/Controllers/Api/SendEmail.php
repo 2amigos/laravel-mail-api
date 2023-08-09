@@ -20,9 +20,9 @@ class SendEmail extends Controller
     {
         $this->validateRequest($request);
 
-        $from = $request->input('from');
+        $fromEmail = $request->input('from');
         $sender = $request->input('sender', '');
-        $to = $request->input('to');
+        $toEmail = $request->input('to');
         $receiver = $request->input('receiver', '');
         $subject = $request->input('subject', '');
         $template = $request->input('template', config('laravel-mail-api.template'));
@@ -31,8 +31,8 @@ class SendEmail extends Controller
 
         Bus::chain([
             new EmailDispatcher(
-                from: $from,
-                to: $to,
+                fromEmail: $fromEmail,
+                toEmail: $toEmail,
                 sender: $sender,
                 receiver: $receiver,
                 subject: $subject,

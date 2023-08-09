@@ -17,7 +17,7 @@ class AuthorizationProvider
     public static function authorize(Request $request)
     {
         $accessKey = $request->headers->get('accessKey') ?? '';
-        $signedKey = $request->bearerToken();
+        $signedKey = $request->bearerToken() ?? '';
         $timeStamp = $request->headers->get('ts') ?? '';
 
         self::checkTokenExpired($timeStamp);
