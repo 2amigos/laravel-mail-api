@@ -2,7 +2,7 @@
 
 
 use App\Mail\Message;
-use I7lluminate\Mail\Attachment;
+use Illuminate\Mail\Attachment;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
