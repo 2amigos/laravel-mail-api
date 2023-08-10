@@ -18,8 +18,7 @@ class TokenTest extends TestCase
 
         try {
             $this->accessKeyProperties = AuthorizationProvider::getTokenProperties('tests');
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             $this->fail($exception->getMessage());
         }
     }
@@ -38,8 +37,7 @@ class TokenTest extends TestCase
             $this->assertIsString($signature);
 
             return $signature;
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             $this->fail($exception->getMessage());
         }
     }
@@ -65,8 +63,7 @@ class TokenTest extends TestCase
             AuthorizationProvider::checkTokenExpired($this->timeStamp);
 
             $this->expectNotToPerformAssertions();
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             $this->fail($exception->getMessage());
         }
     }
@@ -90,8 +87,7 @@ class TokenTest extends TestCase
 
             $this->assertArrayHasKey('appKey', $tokenProperties);
             $this->assertArrayHasKey('appSecret', $tokenProperties);
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             $this->assertEquals('Invalid access token.', $exception->getMessage());
         }
     }
@@ -110,8 +106,7 @@ class TokenTest extends TestCase
             AuthorizationProvider::checkSignature($accessKey, $signature, $timeStampCheck);
 
             $this->expectNotToPerformAssertions();
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             $this->assertEquals('Invalid token.', $exception->getMessage());
         }
     }

@@ -4,7 +4,6 @@
 use App\Classes\FilesHandler;
 use App\Jobs\EmailDispatcher;
 use App\Jobs\FilesCleanup;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;

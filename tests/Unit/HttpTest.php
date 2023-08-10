@@ -32,8 +32,7 @@ class HttpTest extends TestCase
                 appSecret: $accessKeyProperties['appSecret'],
                 timeStamp: $this->timeStamp,
             );
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             $this->fail($exception->getMessage());
         }
     }
@@ -49,8 +48,11 @@ class HttpTest extends TestCase
             ->withToken($token)
             ->postJson('/api/email/send')
             ->assertStatus(500)
-            ->assertJson(fn (AssertableJson $json) =>
-                $json->has('error', fn (AssertableJson $error) =>
+            ->assertJson(
+                fn (AssertableJson $json) =>
+                $json->has(
+                    'error',
+                    fn (AssertableJson $error) =>
                     $error->whereType('message', 'string')
                         ->where('message', 'Invalid token.')
                         ->etc()
@@ -70,8 +72,11 @@ class HttpTest extends TestCase
             ->withToken('x')
             ->postJson('/api/email/send')
             ->assertStatus(500)
-            ->assertJson(fn (AssertableJson $json) =>
-            $json->has('error', fn (AssertableJson $error) =>
+            ->assertJson(
+                fn (AssertableJson $json) =>
+            $json->has(
+                'error',
+                fn (AssertableJson $error) =>
             $error->whereType('message', 'string')
                 ->where('message', 'Invalid access token.')
                 ->etc()
@@ -93,8 +98,11 @@ class HttpTest extends TestCase
             ->withToken($this->signature)
             ->postJson('/api/email/send')
             ->assertStatus(500)
-            ->assertJson(fn (AssertableJson $json) =>
-            $json->has('error', fn (AssertableJson $error) =>
+            ->assertJson(
+                fn (AssertableJson $json) =>
+            $json->has(
+                'error',
+                fn (AssertableJson $error) =>
             $error->whereType('message', 'string')
                 ->where('message', 'Token expired.')
                 ->etc()
