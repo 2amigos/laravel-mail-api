@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Exception;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class AuthorizationProvider
 {
@@ -16,6 +17,8 @@ class AuthorizationProvider
      */
     public static function authorize(Request $request)
     {
+        Log::info('Retrieving authentication signature from request');
+
         $accessKey = $request->headers->get('accessKey') ?? '';
         $signedKey = $request->bearerToken() ?? '';
         $timeStamp = $request->headers->get('ts') ?? '';
@@ -33,6 +36,8 @@ class AuthorizationProvider
      */
     public static function checkSignature(string $accessKey, string $signedKey, string $timeStamp): void
     {
+        Log::info('Checking signature');
+
         $accessProperties = self::getTokenProperties($accessKey);
 
         $hashToken = self::signToken(
@@ -42,7 +47,11 @@ class AuthorizationProvider
         );
 
         if (! hash_equals($hashToken, $signedKey)) {
-            throw new Exception('Invalid token.');
+            $errorMessage = 'Invalid token.';
+
+            Log::error($errorMessage);
+
+            throw new Exception($errorMessage);
         }
     }
 
@@ -55,6 +64,8 @@ class AuthorizationProvider
      */
     public static function signToken(string $appKey, string $appSecret, string $timeStamp): string
     {
+        Log::info('Signing token');
+
         return hash_hmac(config('laravel-mail-api.hashSignature'), $appKey . $timeStamp, $appSecret);
     }
 
@@ -65,10 +76,16 @@ class AuthorizationProvider
      */
     public static function checkTokenExpired(string $timeStamp): void
     {
+        Log::info('Checking if token life is valid');
+
         $tokenLifeTime = config('laravel-mail-api.tokenTime');
 
         if (Carbon::parse($timeStamp)->addMinutes($tokenLifeTime)->lessThan(Carbon::now()->utc())) {
-            throw new Exception('Token expired.');
+            $errorMessage = 'Token expired.';
+
+            Log::error($errorMessage);
+
+            throw new Exception($errorMessage);
         }
     }
 
@@ -79,10 +96,16 @@ class AuthorizationProvider
      */
     public static function getTokenProperties(string $accessKey): array
     {
+        Log::info('Retrieving token properties through Access Key');
+
         $keys = collect(config('laravel-mail-api.accessTokens'));
 
         if (is_null($accessTokenProperties = $keys->get($accessKey))) {
-            throw new Exception('Invalid access token.');
+            $errorMessage = 'Invalid access token.';
+
+            Log::error($errorMessage);
+
+            throw new Exception($errorMessage);
         }
 
         return $accessTokenProperties;
