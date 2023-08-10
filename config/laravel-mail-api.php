@@ -45,7 +45,7 @@ return [
     |
     | defines the hash algorithm for Access Key signature
      */
-    'hashSignature' => env('HASH_SIGNATURE', 'sha256'),
+    'hashSignature' => env('HASH_SIGNATURE', 'sha512'),
 
     /*
     |-----------------------------------------------------------

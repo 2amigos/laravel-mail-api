@@ -17,16 +17,20 @@
 Laravel Mail API is an email microservice to avoid having to configure mail over and over
 on projects involving microservices infrastructure.
 
-It uses [Laravel Sanctum](https://laravel.com/docs/10.x/sanctum) to manage token issuing and user authentication.
-The email sender interface is defined with [Laravel Mail](https://laravel.com/docs/10.x/mail) (powered by [Symfony Mailer](https://symfony.com/doc/6.2/mailer.html))
-with [Markdown Mail Notifications](https://laravel.com/docs/10.x/notifications#markdown-mail-notifications) to enhance to email layout configuration.
+It uses Signed AppKeys to handle the authentications through requests.
+The mailer transport interface was build using [Laravel Mail](https://laravel.com/docs/10.x/mail) (powered by [Symfony Mailer](https://symfony.com/doc/6.2/mailer.html))
+with [Markdown Mail Notifications](https://laravel.com/docs/10.x/notifications#markdown-mail-notifications) to enhance the email layout configuration.
 
-To accomplish the email sending with an efficient response time, Laravel Mail API uses [Laravel Queues](https://laravel.com/docs/10.x/queues)
-to execute the tasks in background. We already have configured drivers for **Redis** ([Predis](https://github.com/predis/predis)) and **Database** connections. You are free to configure other driver if it's needed.
+To accomplish dispatching emails with an efficient response time, Laravel Mail API uses [Laravel Queues](https://laravel.com/docs/10.x/queues)
+to execute the tasks in background. We already have configured a driver for **Redis** ([Predis](https://github.com/predis/predis)) connection. You are free to configure other driver if it's needed.
 
-Finally, it makes use of [Laravel Localization](https://laravel.com/docs/10.x/localization#main-content) for content internationalization and [Laravel Logs](https://laravel.com/docs/10.x/logging#main-content) for logs. 
+Finally, it makes use of [Laravel Localization](https://laravel.com/docs/10.x/localization#main-content) for content internationalization and [Laravel Logs](https://laravel.com/docs/10.x/logging#main-content) 
+for logging. 
 
 ## Install
+```bash
+$ #to be added
+```
 
 ## Configuration
 
@@ -45,34 +49,76 @@ To start up/stop the docker container, use the following commands:
 $ ./vendor/bin/sail up -d
 
 # to stop the container
-$ ./vendor/bin/sail stop 
+$ ./vendor/bin/sail stop
 ```
 
-If you're using Laravel Sail, refer to **.env.sail** for mysql and redis connection setup.   
+If you're using Laravel Sail, refer to **.env.sail** for redis connection strings.   
 
 The **.env.example** file gives the basic structure your project must have in order to run the service properly. Copy its content to **.env** file.
 
 ### Application Configuration
 
-After configuring your database connection on your **.env** file, you're ready to migrate the necessary tables through the command bellow:
+As mentioned before, we're using Signed AppKeys for requests authentication.
 
-```SH
-$ php artisan migrate
+First, you have to define you're Access Token (AppKey and AppSecret) on 
+`./config/laravel-mail-api`, on `AccessTokens` section.
+
+We already provided a sample access key.
+
+```php
+# register access token
+...
+'accessTokens' => [
+    'access-key-user-1' => [
+        'appKey' => 'jwYitJJOop2v',
+        'appSecret' => 'token',
+    ],
+   ... 
+];
 ```
 
-or, if you are using Sail
+You can register as many access token it's necessary for your microservices.
 
-```SH
-$ ./vendor/bin/sail php artisan migrate
+With the access token defined, we just need to sign it to and add its values
+to the request header.
+
+### Access Token Sign Algorithm
+
+Define a hash algorithm to create a hashed token. The default is `sha512`.
+You can define it on by adding `HASH_SIGNATURE` on the `.env` file:
+
+``
+HASH_SIGNATURE=sha512
+``
+
+To create a signature for you access token, you follow this steps:
+
+Get the current timestamp (on UTC) on ISO-8601 format.
+
+```bash
+$ date -u +'%Y-%m-%dT%H:%M:%S.%3NZ'
+
+#ouputs date format
+$ 2023-08-10T04:32:25.620Z
 ```
 
-Now, with the database set, the user can be created by running the next command, and following a couple of simple steps.
+Then, simple hash your AppKey with the gotten timestamp, using your AppSecret as the 
+hash password.
 
-```SH
-$ php artisan app:create-user
+```bash
+signature: HASH-HMACK( AppKey + timestamp, AppSecret )
 
-# or on sail
-$ ./vendor/bin/sail php artisan app:create-user
+# with our sample values
+signature: HASH-HMACK( 'jwYitJJOop2v' + '2023-08-10T04:32:25.620Z', 'token' )
+
+#output
+cb64bbccdff25dcaba24e4c029aa54d99522a3e2e70e5be7be1b48dd8816b4e05b0102f2a2775c895ac73f649b45f6f97f755a112a9f4a206e4053128fc5ada9
+```
+
+A command was created to help the signature creation, for testing purposes:
+
+```bash
+$ php artisan app:create-signature
 ```
 
 ### Email Transport Configuration
@@ -90,11 +136,6 @@ MAIL_PASSWORD={smtp-mailer-email-password{
 MAIL_ENCRYPTION=tls
 ```
 
-The project has [Laravel Pint](https://laravel.com/docs/10.x/pint) configured, you can run the command bellow to assure the code style is being followed:
-```SH
-$ ./vendor/bin/pint
-```
-
 ## Usage
 
 To serve the application, Laravel provides the handy built in command **serve**
@@ -110,28 +151,23 @@ If you run the command through Laravel Sail, the application will be served on p
 
 ## Endpoints
 
-The API has two endpoints: `/token` and `/send-message`. They live under the `/api` prefix.
+The API has one endpoint: `/api/email/send`.
 
 A postman collection `Laravel Mail API` has been served to simplify the testing process.
 
-### /token
-The **token** endpoints uses Basic Authentication to validate the user. It expects only a header
-`Authorization: Basic {basic-token}` in order to authenticate the user.
+### /api/email/send
 
-The `basic-token` can be obtained by `echo -n email:password | base64` 
+In order to have the authentication mechanism working, we must add the following headers:
+```bash
+Authentication: Bearear {signature}
+ts: {timestap (used to sign the appKey)}
+accessToken: {your access token}
 
-Here is a `/token` request example:
-
-```SH
-$ curl --location --request POST 'http://localhost/api/token' 
-\ --header 'Authorization: Basic {basic_token}'
+# using our sample values
+Authentication: Bearear cb64bbccdff25dcaba24e4c029aa54d99522a3e2e70e5be7be1b48dd8816b4e05b0102f2a2775c895ac73f649b45f6f97f755a112a9f4a206e4053128fc5ada9
+ts: 2023-08-10T04:32:25.620Z
+accessToken: access-key-user-1
 ```
-
-### /send-message
-
-The **send-message** is where the emails are dispatched.
-
-It must have a an `Authorization: Bearer {token}` header.
 
 Then you can send `multipart/form-data` request with the following parameters:
 
@@ -147,17 +183,15 @@ Then you can send `multipart/form-data` request with the following parameters:
 Here is a sample request:
 
 ```SH
-$ curl --location 'http://localhost/api/send-message' \
---header 'Authorization: Bearer {token}' \
---form 'from="{email-sender@domain}"' \
---form 'sender="Mark"' \
---form 'to="{email-receiver@domain}"' \
---form 'receiver="Jhon"' \
---form 'subect="testing api"' \
---form 'attachments[]=@"{path to file 3}"' \
---form 'attachments[]=@"{path to file 2}"' \
---form 'language="en"' \
---form 'template="hello-world"'
+curl --location 'http://localhost:8000/api/email/send' \
+--header 'accessKey: tests' \
+--header 'ts: 2023-08-10T04:56:50+00:00' \
+--header 'Authorization: Bearer a7ef7032999db841c75a7a2de4d40106e6de19b7c269b722f81bc51a1f713f6642d25e3bc25af7b04f9a385ef8f9c9ed346e029d0262cbc61dde2f640d0f8c48' \
+--form 'from="test@mail.com"' \
+--form 'to="receiver@email.com"' \
+--form 'sender="2am.tech"' \
+--form 'receiver="Amigo OSS"' \
+--form 'subject="test api"'
 ```
 
 Done. Now your new message is on the queue, ready to be dispatched. To achieve that, 
@@ -172,7 +206,7 @@ $ ./vendor/bin/sail php artisan queue:work
 
 #### Email Attachments
 
-The /send-email endpoint apply validations for attachments mimetypes.
+The `/api/email/send` endpoint apply validations for attachments mimetypes.
 
 By default, the application will allow `PDF` and any `Image` mimetypes.
 
