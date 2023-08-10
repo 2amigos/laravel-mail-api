@@ -43,16 +43,17 @@ class CreateSignature extends Command
             return 0;
         }
 
-        $timezone = Carbon::now()->utc()->toIso8601String();
+        $timeStamp = Carbon::now()->utc()->toIso8601String();
 
-        $this->info('tz: ' . $timezone);
+        $this->info('ts: ' . $timeStamp);
+
         $signature = AuthorizationProvider::signToken(
             appKey: $tokenAttributes['appKey'],
             appSecret: $tokenAttributes['appSecret'],
-            timeStamp: $timezone,
+            timeStamp: $timeStamp,
         );
 
-        $this->info($signature);
+        $this->info('Signature: ' . $signature);
 
         return 1;
     }

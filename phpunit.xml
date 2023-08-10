@@ -18,6 +18,13 @@
         </include>
         <exclude>
             <file>./app/Providers/BroadcastServiceProvider.php</file>
+            <file>./app/Providers/AppServiceProvider.php</file>
+            <file>./app/Providers/EventServiceProvider.php</file>
+            <file>./app/Providers/RouteServiceProvider.php</file>
+            <file>./app/Models/User.php</file>
+            <file>./app/Console/Kernel.php</file>
+            <file>./app/Http/Controllers/Controller.php</file>
+            <file>./app/Http/Kernel.php</file>
         </exclude>
     </coverage>
     <php>

@@ -7,19 +7,26 @@ use Tests\TestCase;
 
 class CommandsTest extends TestCase
 {
-    use RefreshDatabase;
-
-    public function test_create_user_command()
+    public function test_create_app_key_signature_command()
     {
-        $email = fake()->email;
-
-        $this->artisan('app:create-user')
-            ->expectsQuestion('Define an Name', fake()->name)
-            ->expectsQuestion('Define an Email', $email)
-            ->expectsQuestion('Define a Password', '123456')
+        $this->artisan('app:create-signature')
+            ->expectsOutput('Laravel API Service')
+            ->expectsOutput('Signed access token generation script.')
+            ->expectsOutput('Before moving ahead, define your access key in ./config/laravel-mail-api-token.php')
+            ->expectsQuestion('Inform the Token Access Key', 'tests')
+            ->expectsOutputToContain('ts')
+            ->expectsOutputToContain('Signature:')
             ->assertExitCode(1);
-
-        $this->assertNotNull(User::whereEmail($email));
     }
 
+    public function test_create_app_key_invalid_access_key()
+    {
+        $this->artisan('app:create-signature')
+            ->expectsOutput('Laravel API Service')
+            ->expectsOutput('Signed access token generation script.')
+            ->expectsOutput('Before moving ahead, define your access key in ./config/laravel-mail-api-token.php')
+            ->expectsQuestion('Inform the Token Access Key', 'x')
+            ->expectsOutput('Invalid access token.')
+            ->assertExitCode(0);
+    }
 }

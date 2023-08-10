@@ -12,8 +12,6 @@ use Tests\TestCase;
 
 class JobsTest extends TestCase
 {
-    use RefreshDatabase;
-
     public $files = [];
 
     protected function setUp(): void
@@ -28,35 +26,36 @@ class JobsTest extends TestCase
         Queue::fake();
         Mail::fake();
 
+        $dispatcher = new EmailDispatcher(
+            fromEmail: fake()->email,
+            toEmail: fake()->email,
+            sender: fake()->name,
+            receiver: fake()->name,
+            subject: 'testing jobs',
+            template: 'hello-world',
+            language: 'en',
+            attachments: $this->files
+        );
+
+        $dispatcher->handle();
+        dispatch_sync($dispatcher);
+
         dispatch_sync(
             new EmailDispatcher(
-                from: fake()->email,
-                to: fake()->email,
-                sender: fake()->name,
-                receiver: fake()->name,
-                subject: 'testing jobs',
-                template: 'hello-world',
-                language: 'en',
-                attachments: $this->files
+                fromEmail: fake()->email,
+                toEmail: fake()->email,
             )
         );
 
         dispatch_sync(
             new EmailDispatcher(
-                from: fake()->email,
-                to: fake()->email,
-            )
-        );
-
-        dispatch_sync(
-            new EmailDispatcher(
-                from: fake()->email,
-                to: fake()->email,
+                fromEmail: fake()->email,
+                toEmail: fake()->email,
                 sender: fake()->name,
                 receiver: fake()->name,
                 subject: 'testing jobs',
                 template: 'password',
-                language: 'es',
+                language: 'invalid-language',
             )
         );
 
@@ -67,9 +66,11 @@ class JobsTest extends TestCase
     {
         Queue::fake();
 
+        $dispatcher = new FilesCleanup($this->files);
         dispatch_sync(
-            new FilesCleanup($this->files)
+            $dispatcher
         );
+        $dispatcher->handle();
 
         dispatch_sync(
             new FilesCleanup([])

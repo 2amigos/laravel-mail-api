@@ -1,39 +1,129 @@
 <?php
 
-
-use App\Models\User;
-use App\Providers\AuthorizationProvider;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\TestWith;
 use Tests\TestCase;
+use App\Providers\AuthorizationProvider;
+use Carbon\Carbon;
 
 class TokenTest extends TestCase
 {
-    public function test_should_issue_token()
+    private array $accessKeyProperties;
+    private string $timeStamp;
+
+    protected function setUp(): void
     {
-        $user = User::factory()->create();
+        parent::setUp();
+
+        $this->timeStamp = Carbon::now()->utc()->toIso8601String();
 
         try {
-            $token = AuthorizationProvider::createToken($user);
-
-            $this->assertIsArray($token);
-            $this->assertArrayHasKey('token', $token);
-
-        } catch (Exception $exception) {
+            $this->accessKeyProperties = AuthorizationProvider::getTokenProperties('tests');
+        }
+        catch (Exception $exception) {
             $this->fail($exception->getMessage());
         }
     }
 
-    public function test_should_find_auth_by_token()
+    public function test_sign_token(): string
     {
-        $user = User::factory()->create();
+        try {
+            $timeStamp = Carbon::now()->utc()->toIso8601String();
+
+            $signature = AuthorizationProvider::signToken(
+                appKey: $this->accessKeyProperties['appKey'],
+                appSecret: $this->accessKeyProperties['appKey'],
+                timeStamp: $timeStamp,
+            );
+
+            $this->assertIsString($signature);
+
+            return $signature;
+        }
+        catch (Exception $exception) {
+            $this->fail($exception->getMessage());
+        }
+    }
+
+    public function test_sign_token_invalid_hash_alg()
+    {
+        $this->expectException('ValueError');
+
+        config(['laravel-mail-api.hashSignature' => 'sha-256']);
+
+        $timeStamp = Carbon::now()->utc()->toIso8601String();
+
+        AuthorizationProvider::signToken(
+            appKey: $this->accessKeyProperties['appKey'],
+            appSecret: $this->accessKeyProperties['appKey'],
+            timeStamp: $timeStamp,
+        );
+    }
+
+    public function test_token_time_is_valid()
+    {
+        try {
+            AuthorizationProvider::checkTokenExpired($this->timeStamp);
+
+            $this->expectNotToPerformAssertions();
+        }
+        catch (Exception $exception) {
+            $this->fail($exception->getMessage());
+        }
+    }
+
+    public function test_token_time_is_expired()
+    {
+        $this->expectExceptionMessage('Token expired.');
+
+        $tokenTime = config('laravel-mail-api.tokenTime');
+        $this->travel($tokenTime + 1)->minutes();
+
+        AuthorizationProvider::checkTokenExpired($this->timeStamp);
+    }
+
+    #[TestWith(["tests"])]
+    #[TestWith(["tests-x-not-exists"])]
+    public function test_get_token_properties(string $accessKey)
+    {
+        try {
+            $tokenProperties = AuthorizationProvider::getTokenProperties($accessKey);
+
+            $this->assertArrayHasKey('appKey', $tokenProperties);
+            $this->assertArrayHasKey('appSecret', $tokenProperties);
+        }
+        catch (Exception $exception) {
+            $this->assertEquals('Invalid access token.', $exception->getMessage());
+        }
+    }
+
+    #[Testwith(["tests", "2023-08-09T04:37:04.153Z", "2023-08-09T04:37:04.153Z"])]
+    #[Testwith(["tests", "2023-08-09T04:37:04.153Z"])]
+    public function test_check_signature(string $accessKey, string $timeStampCheck, ?string $timeStamp = null)
+    {
+        $timeStamp = ! is_null($timeStamp)
+            ? $timeStamp
+            : $this->timeStamp;
+
+        $signature = $this->createSignedToken($accessKey, $timeStamp);
 
         try {
-            $token = AuthorizationProvider::createToken($user);
+            AuthorizationProvider::checkSignature($accessKey, $signature, $timeStampCheck);
 
-            $storedToken = AuthorizationProvider::findToken($token['token']);
+            $this->expectNotToPerformAssertions();
+        }
+        catch (Exception $exception) {
+            $this->assertEquals('Invalid token.', $exception->getMessage());
+        }
+    }
 
-            $this->assertNotNull($storedToken);
-
+    private function createSignedToken(string $accessKey, string $timeStamp): string
+    {
+        try {
+            return AuthorizationProvider::signToken(
+                appKey: $this->accessKeyProperties['appKey'],
+                appSecret: $this->accessKeyProperties['appSecret'],
+                timeStamp: $this->timeStamp,
+            );
         } catch (Exception $exception) {
             $this->fail($exception->getMessage());
         }

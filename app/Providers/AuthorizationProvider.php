@@ -47,10 +47,11 @@ class AuthorizationProvider
     }
 
     /**
-     * @param string $token
+     * @param string $appKey
+     * @param string $appSecret
      * @param string $timeStamp
-     * @param string $secret
      * @return string
+     * @throws Exception
      */
     public static function signToken(string $appKey, string $appSecret, string $timeStamp): string
     {

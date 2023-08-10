@@ -58,6 +58,9 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
     /**
      * returns the given template in case template file exists
      * returns the default app template in case template file does not exists
+     *
+     * @param string $template
+     * @return string
      */
     private function getTemplate(string $template): string
     {
@@ -73,8 +76,11 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
     /**
      * returns the given language in case language path exists
      * returns the default language in case language path does not exists
+     *
+     * @param string $language
+     * @return string
      */
-    private function getLanguage(string $language): string
+    public function getLanguage(string $language): string
     {
         return file_exists(lang_path($language))
             ? $language
