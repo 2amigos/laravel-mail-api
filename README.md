@@ -43,6 +43,17 @@ You can configure a [shell alias for Sail](https://laravel.com/docs/10.x/sail#co
 Please, refer to Sail Docs to know more about [executing commands in your application's container](https://laravel.com/docs/10.x/sail#executing-sail-commands).
 
 To start up/stop the docker container, use the following commands:
+To be able to use the docker container, you need to first install the dependencies.
+To achieve that, you must execute the given command:
+
+```bash
+$ docker run --rm \
+    -u "$(id -u):$(id -g)" \
+    -v "$(pwd):/var/www/html" \
+    -w /var/www/html \
+    laravelsail/php82-composer:latest \
+    composer install --ignore-platform-reqs
+```
 
 ```SH
 // to start up the container
