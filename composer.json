@@ -3,6 +3,7 @@
     "type": "project",
     "description": "Laravel mail API microservice",
     "keywords": [
+        "php",
         "framework",
         "laravel",
         "mail",
