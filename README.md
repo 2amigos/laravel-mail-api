@@ -9,8 +9,8 @@
 
 [![Build](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml/badge.svg)](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml)
 [![Software License](https://img.shields.io/badge/license-BSD-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![code coverage - change](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml/badge.svg)](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml)
-[![code qualit - change](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml/badge.svg)](https://github.com/2amigos/laravel-mail-api/actions/workflows/ci.yml)
+[![Codacy Badge Quality](https://app.codacy.com/project/badge/Grade/0a7b90cb75054113b3977186ee89cc33)](https://app.codacy.com?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge Coverage](https://app.codacy.com/project/badge/Coverage/0a7b90cb75054113b3977186ee89cc33)](https://app.codacy.com?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
 
 ## About Mail API Service
 
