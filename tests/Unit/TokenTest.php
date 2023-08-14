@@ -114,10 +114,12 @@ class TokenTest extends TestCase
     private function createSignedToken(string $accessKey, string $timeStamp): string
     {
         try {
+            $accessToken = AuthorizationProvider::getTokenProperties($accessKey);
+
             return AuthorizationProvider::signToken(
-                appKey: $this->accessKeyProperties['appKey'],
-                appSecret: $this->accessKeyProperties['appSecret'],
-                timeStamp: $this->timeStamp,
+                appKey: $accessToken['appKey'],
+                appSecret: $accessToken['appSecret'],
+                timeStamp: $timeStamp,
             );
         } catch (Exception $exception) {
             $this->fail($exception->getMessage());

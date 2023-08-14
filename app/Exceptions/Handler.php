@@ -46,19 +46,19 @@ class Handler extends ExceptionHandler
         });
     }
 
-    public function render($request, Throwable $e)
+    public function render($request, Throwable $exception)
     {
-        $e = $this->mapException($e);
+        $exception = $this->mapException($exception);
 
         $response = [
             'error' => [
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ],
             'status' => 500,
         ];
 
         if (env('APP_ENV') !== 'production') {
-            $response['trace'] = $e->getTrace();
+            $response['trace'] = $exception->getTrace();
         }
 
         return response() ->json(

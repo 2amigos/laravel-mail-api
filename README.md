@@ -182,14 +182,14 @@ accessToken: access-key-user-1
 
 Then you can send `multipart/form-data` request with the following parameters:
 
-- from
-- sender *(optional)*
-- to
-- receiver *(optional)*
-- subject
-- language *(optional, default=en)*
-- template *(optional, default defined on the application)*
-- attachments[] *(optional)*
+-  from
+-  sender *(optional)*
+-  to
+-  receiver *(optional)*
+-  subject
+-  language *(optional, default=en)*
+-  template *(optional, default defined on the application)*
+-  attachments[] *(optional)*
 
 Here is a sample request:
 

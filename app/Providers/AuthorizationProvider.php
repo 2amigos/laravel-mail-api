@@ -100,7 +100,7 @@ class AuthorizationProvider
 
         $keys = collect(config('laravel-mail-api.accessTokens'));
 
-        if (is_null($accessTokenProperties = $keys->get($accessKey))) {
+        if (is_null($accessProperties = $keys->get($accessKey))) {
             $errorMessage = 'Invalid access token.';
 
             Log::error($errorMessage);
@@ -108,6 +108,6 @@ class AuthorizationProvider
             throw new Exception($errorMessage);
         }
 
-        return $accessTokenProperties;
+        return $accessProperties;
     }
 }
