@@ -23,6 +23,8 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
 
     private ?string $language;
 
+    public $tries = 3;
+
     public $backoff = 3;
 
     public function __construct(string $fromEmail, string $toEmail, ?string $sender = '', ?string $receiver = '', ?string $subject = '', ?string $template = '', ?string $language = '', ?array $attachments = [])
