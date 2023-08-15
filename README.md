@@ -29,7 +29,7 @@ for logging.
 
 ## Install
 ```bash
-$ #to be added
+$ composer create-project 2am.tech/laravel-mail-api
 ```
 
 ## Configuration
@@ -109,7 +109,7 @@ Get the current timestamp (on UTC) on ISO-8601 format.
 ```bash
 $ date -u +'%Y-%m-%dT%H:%M:%S.%3NZ'
 
-#ouputs date format
+# ouputs date format
 $ 2023-08-10T04:32:25.620Z
 ```
 
@@ -122,7 +122,7 @@ signature: HASH-HMACK( AppKey + timestamp, AppSecret )
 # with our sample values
 signature: HASH-HMACK( 'jwYitJJOop2v' + '2023-08-10T04:32:25.620Z', 'token' )
 
-#output
+# output
 cb64bbccdff25dcaba24e4c029aa54d99522a3e2e70e5be7be1b48dd8816b4e05b0102f2a2775c895ac73f649b45f6f97f755a112a9f4a206e4053128fc5ada9
 ```
 
