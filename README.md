@@ -29,7 +29,7 @@ for logging.
 
 ## Install
 ```bash
-$ composer create-project 2am.tech/laravel-mail-api --stability=beta
+$ composer create-project 2am.tech/laravel-mail-api app
 ```
 
 ## Configuration
