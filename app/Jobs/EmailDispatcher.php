@@ -55,6 +55,7 @@ class EmailDispatcher implements ShouldQueue, ShouldBeUnique
         Mail::to($this->toEmail, $this->receiver)
             ->locale($this->getLanguage($this->language))
             ->send($this->message);
+        Log::info('Email sent');
     }
 
     /**
