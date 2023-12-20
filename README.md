@@ -264,6 +264,53 @@ but it's extremely recommended to use [Supervisor](http://supervisord.org/) when
 
 Laravel has a nice guide to properly [configure](https://laravel.com/docs/10.x/queues#supervisor-configuration) the Supervisor.
 
+## Serverless deployment to AWS Lambda
+
+This project uses [Bref](https://bref.sh/) framework to empower a smoothly deployment to
+AWS Lambda.
+
+It has a tiny list of dependencies to achieve that:
+
+- Node.js 14.0+
+- [Serverless](https://www.serverless.com/framework/docs) framework
+- and, an AWS account (key and secret).
+
+To install the Serverless framework:
+
+```bash
+$ npm install -g serverless
+```
+
+Install Serverless plugin dependency:
+```bash
+$ npm install
+```
+
+And them, setup the AWS credentials for the Serverless framework:
+```bash
+$ serverless config credentials --provider aws --key "key" --secret "secret"
+```
+
+You can change the project name on file `serverless.yml` to match your project name,
+right on the first line:
+
+```yml
+service: laravel-mail-api
+```
+
+Last step before the actual deployment is to clear local cashed files:
+```bash
+$ php artisan config:clear
+```
+
+and, them:
+```bash
+$ serverless deploy
+```
+
+Once the process is finished, you will be prompted with the endpoint,
+functions and jobs created on AWS Lambda!
+
 ## Contributing
 
 Please, see [CONTRIBUTING](./contributing.md) for details.
